@@ -6,8 +6,8 @@ import json
 topic = "user_movies"
 kafka_config = {
     "bootstrap.servers": "localhost:9092",
-    "batch.num.messages": 1000,  # Batch messages
-    "delivery.report.only.error": True  # Asynchronous delivery
+    "batch.num.messages": 1000, 
+    "delivery.report.only.error": True
 }
 
 producer = Producer(kafka_config)
@@ -24,11 +24,11 @@ while True:
         if response.status_code == 200:
             data = json.dumps(response.json())
             producer.produce(topic, key="moviedb", value=data)
-            producer.flush()  # No timeout for flush to keep it synchronous
+            producer.flush()
             print(response.json())
         else:
             print(f"Failed to fetch data. Status Code: {response.status_code}")
     except Exception as e:
         print(f"Error: {e}")
 
-    time.sleep(10)  # Introduce delay between iterations
+    time.sleep(10)
