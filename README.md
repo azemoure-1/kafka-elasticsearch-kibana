@@ -42,9 +42,16 @@ Le projet met en œuvre diverses compétences, notamment :
 
 - Conception d'indices et de modèles de données pour un stockage optimisé des informations des films et des utilisateurs.
 
+![4](https://github.com/azemoure-1/kafka-elasticsearch-kibana/assets/113553607/1cb7a11c-a290-4a66-857f-9a4c46028b97)
+
+
 ### Développement de l'API de Recommandation
 
 - Programmation d'une API REST avec Flask, interagissant avec Elasticsearch pour récupérer et servir les recommandations.
+
+![3](https://github.com/azemoure-1/kafka-elasticsearch-kibana/assets/113553607/2b7f91b1-9260-4067-b0ac-e738094c4efb)
+
+
 
 ### Gouvernance des Données
 
@@ -53,6 +60,9 @@ Le projet met en œuvre diverses compétences, notamment :
 ### Visualisation avec Kibana
 
 - Création de tableaux de bord pour des visualisations significatives, telles que la répartition des films par date de sortie, les films populaires, etc.
+
+![2](https://github.com/azemoure-1/kafka-elasticsearch-kibana/assets/113553607/e6a12478-d1ef-4722-b79e-30e5c72e4738)
+
 
 ## Complications et Solutions
 
