@@ -1,65 +1,70 @@
+from flask import Flask, render_template, request, jsonify
 from elasticsearch import Elasticsearch
-from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
+es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'scheme': 'http'}])
 
-# Create connection with Elasticsearch
-client = Elasticsearch("http://localhost:9200")
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-def get_movies(query=None):
-    body = {
+@app.route('/get_movie_info', methods=['GET'])
+def get_movie_info():
+    title = request.args.get('title')
+
+    if not title:
+        return render_template('index.html', error="Title parameter is required")
+
+    # Query to get the input movie information
+    query_input_movie = {
         "query": {
             "match": {
-                "title": query
-            }
-        }
-    } if query else {"query": {"match_all": {}}}
-
-    result = client.search(index='movies', body=body)
-    return result['hits']['hits']
-
-def get_movie_by_title(title):
-    query = {
-        "query": {
-            "match": {
-                "title": title
+                "title.keyword": title
             }
         }
     }
-    result = client.search(index='movies', body=query)
-    return result['hits']['hits']
 
-def get_movie_recommendations(title):
-    # (unchanged from the previous code)
-
-@app.route('/api/movies/<string:title>', methods=['GET'])
-def get_movie(title):
     try:
-        movie = get_movie_by_title(title)
-        if movie:
-            return jsonify(movie)
-        else:
-            return jsonify({"error": f"Movie with title '{title}' not found"}), 404
+        # Get information about the input movie
+        result_input_movie = es.search(index='user_movies', body=query_input_movie)
+        hits_input_movie = result_input_movie['hits']['hits']
+
+        if not hits_input_movie:
+            return render_template('index.html', error="Movie not found")
+
+        input_movie_info = hits_input_movie[0]['_source']
+        genre = input_movie_info.get("genres_name")[0]  # Assuming the first genre is used for similarity
+
+        # Query to get the top 5 similar movies based on the genre
+        query_similar_movies = {
+            "query": {
+                "bool": {
+                    "must_not": {
+                        "term": {
+                            "title.keyword": title
+                        }
+                    },
+                    "filter": {
+                        "term": {
+                            "genres_name.keyword": genre
+                        }
+                    }
+                }
+            },
+            "size": 5,
+            "sort": [
+                {"popularity": {"order": "desc"}}
+            ]
+        }
+
+        # Get information about the similar movies
+        result_similar_movies = es.search(index='user_movies', body=query_similar_movies)
+        hits_similar_movies = result_similar_movies['hits']['hits']
+
+        return render_template('index.html', movie_info=input_movie_info, similar_movies=hits_similar_movies)
+
     except Exception as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
-@app.route('/api/recommendations/<string:title>', methods=['GET'])
-def get_recommendations(title):
-    try:
-        recommendations = get_movie_recommendations(title)
-        return jsonify(recommendations)
-    except Exception as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        search_query = request.form.get('search_query', '')
-        movies = get_movies(search_query)
-    else:
-        movies = get_movies()
-
-    return render_template("index.html", movies=movies)
+        return render_template('index.html', error=str(e))
 
 if __name__ == '__main__':
     app.run(debug=True)
