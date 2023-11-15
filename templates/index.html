@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Movie Information</title>
+</head>
+<body>
+    <div class="movie-info">
+        <h1>Movie Information</h1>
 
+        <!-- Search Bar -->
+        <form action="/get_movie_info" method="GET">
+            <label for="title">Search by Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter movie title">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if movie_info %}
+            <h2>{{ movie_info.title }}</h2>
+            <div id="movie-data">
+                <p><strong>Release Date:</strong> {{ movie_info.release_date }}</p>
+                <p><strong>Popularity:</strong> {{ movie_info.popularity }}</p>
+                <p><strong>Original Language:</strong> {{ movie_info.original_language }}</p>
+            </div>
+
+            {% if similar_movies %}
+                <h3>Top 5 Similar Movies:</h3>
+                <ul>
+                    {% for movie in similar_movies %}
+                        <li>
+                            <h4>{{ movie._source.title }}</h4>
+                            <div>
+                                <p><strong>Release Date:</strong> {{ movie._source.release_date }}</p>
+                                <p><strong>Popularity:</strong> {{ movie._source.popularity }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% elif error %}
+            <p class="error">{{ error }}</p>
+        {% else %}
+            <p>No movie information available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
