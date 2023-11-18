@@ -55,7 +55,8 @@ Le projet met en œuvre diverses compétences, notamment :
 
 ### Gouvernance des Données
 
-- Intégration de pratiques de gouvernance des données pour garantir la qualité, la confidentialité, et la conformité des données.
+
+Dans le cadre de ce flux de traitement de données, une attention particulière a été portée à la gouvernance des données, en conformité avec le Règlement Général sur la Protection des Données (RGPD). Des pratiques rigoureuses de gouvernance des données ont été intégrées pour garantir la qualité, la confidentialité et la conformité des informations extraites de l'API The Movie Database. Les données sont collectées de manière sécurisée, avec la prise en compte des principes de minimisation et de pertinence, afin de limiter la quantité de données traitées et de s'assurer qu'elles sont directement liées à l'objectif du traitement. De plus, des mesures de sécurité, telles que l'utilisation de clés d'API, ont été mises en place pour protéger l'accès aux données sensibles. En outre, le processus intègre des mécanismes de contrôle de la qualité des données pour garantir leur exactitude avant l'envoi aux systèmes ultérieurs, et des étapes de pseudonymisation ont été appliquées lorsque cela est approprié. Ces pratiques reflètent l'engagement envers la protection des données personnelles et la conformité aux normes éthiques et juridiques en vigueur.
 
 ### Visualisation avec Kibana
 
