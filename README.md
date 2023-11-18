@@ -16,10 +16,9 @@ Le projet met en œuvre diverses compétences, notamment :
 
 - Configuration et gestion de clusters Kafka.
 - Utilisation de SparkStreaming pour le traitement en temps réel des données.
-- Modélisation et stockage efficace des données dans Elasticsearch.
+- stockage efficace des données dans Elasticsearch.
 - Développement d'une API REST avec Flask.
 - Visualisation des données avec Kibana.
-- Gestion de projet avec Git.
 - Pratiques de gouvernance des données.
 
 ## Étapes du Projet
