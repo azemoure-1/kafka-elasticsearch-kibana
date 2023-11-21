@@ -33,9 +33,10 @@ def get_movie_info():
             return render_template('index.html', error="Movie not found")
 
         input_movie_info = hits_input_movie[0]['_source']
-        genre = input_movie_info.get("genres_name")[0]  # Assuming the first genre is used for similarity
+        genre = input_movie_info.get("genres_name")[0]
 
         # Query to get the top 5 similar movies based on the genre
+
         query_similar_movies = {
             "query": {
                 "bool": {
@@ -44,11 +45,13 @@ def get_movie_info():
                             "title.keyword": title
                         }
                     },
-                    "filter": {
-                        "term": {
-                            "genres_name.keyword": genre
-                        }
-                    }
+                    "filter": [
+                        {"term": {"genres_name.keyword": genre}},
+                        {"range": {"popularity": {"gte": input_movie_info.get("popularity") - 1, "lte": input_movie_info.get("popularity") + 1}}},
+                        {"term": {"original_language.keyword": input_movie_info.get("original_language")}},
+                        {"range": {"vote_average": {"gte": input_movie_info.get("vote_average") - 1, "lte": input_movie_info.get("vote_average") + 1}}}
+                        
+                    ]
                 }
             },
             "size": 5,
@@ -68,3 +71,5 @@ def get_movie_info():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
