@@ -11,8 +11,7 @@ spark_conf = SparkConf() \
     .set("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.4,org.elasticsearch:elasticsearch-spark-30_2.12:8.11.0") \
     .set("spark.executor.memory", "2g") \
     .set("spark.executor.cores", "2") \
-    .set("spark.cores.max", "2") \
-    .set("spark.sql.shuffle.partitions", "4")
+    .set("spark.cores.max", "2")
 
 # Create Spark session
 spark = SparkSession.builder.config(conf=spark_conf).getOrCreate()
